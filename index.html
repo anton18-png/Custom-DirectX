@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DirectX Optimizer — Ultimate Gaming Performance Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(46,125,50,0.1) 0%, rgba(198,40,40,0.05) 50%, rgba(21,101,192,0.05) 100%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Кастомный скролл */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2e7d32;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1b5e20;
+        }
+
+        /* Навбар */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(46, 125, 50, 0.3);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2e7d32, #c62828, #1565c0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2e7d32;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 30px 50px;
+        }
+
+        /* Hero секция */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2e7d32, #c62828, #1565c0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #aaa;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .badge-dx {
+            background: rgba(46, 125, 50, 0.2);
+            border: 1px solid #2e7d32;
+            color: #2e7d32;
+        }
+
+        .badge-vk {
+            background: rgba(198, 40, 40, 0.2);
+            border: 1px solid #c62828;
+            color: #c62828;
+        }
+
+        .badge-gl {
+            background: rgba(21, 101, 192, 0.2);
+            border: 1px solid #1565c0;
+            color: #1565c0;
+        }
+
+        /* Карточки установки */
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2e7d32;
+            display: inline-block;
+        }
+
+        .install-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .install-card {
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(46, 125, 50, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .install-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.2);
+        }
+
+        .install-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .install-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .install-card p {
+            color: #aaa;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Цветные секции */
+        .section-dx {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.1), rgba(0, 0, 0, 0.5));
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .section-vk {
+            background: linear-gradient(135deg, rgba(198, 40, 40, 0.1), rgba(0, 0, 0, 0.5));
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-left: 4px solid #c62828;
+        }
+
+        .section-gl {
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.1), rgba(0, 0, 0, 0.5));
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-left: 4px solid #1565c0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .section-icon {
+            font-size: 40px;
+        }
+
+        .section-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+        }
+
+        /* Таблицы */
+        .tweak-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tweak-table th,
+        .tweak-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tweak-table th {
+            background: rgba(0, 0, 0, 0.5);
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .tweak-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tweak-name {
+            font-weight: 600;
+        }
+
+        .tweak-desc {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .badge-small {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-dx-small {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .badge-vk-small {
+            background: #c62828;
+            color: white;
+        }
+
+        .badge-gl-small {
+            background: #1565c0;
+            color: white;
+        }
+
+        /* CLI секция */
+        .cli-section {
+            background: #0d1117;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #30363d;
+        }
+
+        .cli-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .cli-commands {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .cli-item {
+            background: #161b22;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            border-left: 3px solid #2e7d32;
+        }
+
+        .cli-desc {
+            color: #aaa;
+            font-size: 12px;
+            margin-top: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Кнопки управления */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Скачать кнопка */
+        .download-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border: none;
+            padding: 18px 50px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-family: 'Orbitron', monospace;
+            box-shadow: 0 0 20px rgba(46, 125, 50, 0.5);
+        }
+
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(46, 125, 50, 0.8);
+        }
+
+        .btn-download i {
+            margin-right: 10px;
+        }
+
+        /* Социальные кнопки */
+        .social-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .btn-social {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-github {
+            background: #333;
+            color: white;
+        }
+
+        .btn-github:hover {
+            background: #444;
+            transform: scale(1.05);
+        }
+
+        .btn-telegram {
+            background: #0088cc;
+            color: white;
+        }
+
+        .btn-telegram:hover {
+            background: #0099dd;
+            transform: scale(1.05);
+        }
+
+        /* Кнопки твиков */
+        .btn-apply {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #c62828, #8e0000);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-apply:hover, .btn-reset:hover {
+            opacity: 0.85;
+        }
+
+        /* Футер */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #2e7d32;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .section-dx, .section-vk, .section-gl {
+                padding: 20px;
+            }
+            .tweak-table {
+                font-size: 12px;
+            }
+            .btn-download {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">DX_OPTIMIZER</div>
+            <div class="nav-links">
+                <a href="#install">Установка</a>
+                <a href="#directx">DirectX</a>
+                <a href="#vulkan">Vulkan</a>
+                <a href="#opengl">OpenGL</a>
+                <a href="#cli">CLI</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <h1>DIRECTX OPTIMIZER</h1>
+            <p>Мощный инструмент для установки DirectX и оптимизации графики. Более 50 твиков для максимальной производительности в играх.</p>
+            <div class="badges">
+                <span class="badge badge-dx">DirectX 9/11/12</span>
+                <span class="badge badge-vk">Vulkan API</span>
+                <span class="badge badge-gl">OpenGL</span>
+                <span class="badge badge-dx">Game Ready</span>
+                <span class="badge badge-dx">Performance</span>
+            </div>
+        </div>
+
+        <!-- Скачать -->
+        <div class="download-section">
+            <a href="https://github.com/anton18-png/Custom-DirectX/releases/download/v3.1/DirectX_Optimizer.exe" class="btn-download" style="text-decoration: none; display: inline-block;">
+                <i class="fas fa-download"></i> СКАЧАТЬ DX_OPTIMIZER
+            </a>
+        </div>
+
+        <!-- Социальные кнопки -->
+        <div class="social-buttons">
+            <a href="https://github.com/anton18-png/Custom-DirectX" class="btn-social btn-github" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://t.me/all_tweaker" class="btn-social btn-telegram" target="_blank">
+                <i class="fab fa-telegram"></i> Telegram
+            </a>
+        </div>
+
+        <!-- Установка DirectX -->
+        <h2 class="section-title" id="install">📦 Установка DirectX</h2>
+        <div class="install-grid">
+            <div class="install-card">
+                <div class="install-icon">📀</div>
+                <h3>Standard DirectX</h3>
+                <p>Стандартный установщик DirectX — используют 90% пользователей. Официальная версия от Microsoft.</p>
+                <button class="btn-apply" onclick="alert('Скачайте программу и запустите от имени администратора')"><i class="fas fa-download"></i> --StandardDirectX</button>
+            </div>
+            <div class="install-card">
+                <div class="install-icon">⚙️</div>
+                <h3>DirectX For ProOS</h3>
+                <p>Альтернативная версия для профессиональных сборок Windows, если стандартный не работает.</p>
+                <button class="btn-apply" onclick="alert('Скачайте программу и запустите от имени администратора')"><i class="fas fa-download"></i> --DirectXForProOS</button>
+            </div>
+            <div class="install-card">
+                <div class="install-icon">🎮</div>
+                <h3>DirectX Game Edition</h3>
+                <p>Версия из папки Redist игровых установщиков с дополнительными компонентами.</p>
+                <button class="btn-apply" onclick="alert('Скачайте программу и запустите от имени администратора')"><i class="fas fa-download"></i> --DirectXGameEdition</button>
+            </div>
+            <div class="install-card">
+                <div class="install-icon">🎯</div>
+                <h3>DirectX MartyFiles Edition</h3>
+                <p>Специальная редакция от WinClick — не отображается в списке установленных приложений.</p>
+                <button class="btn-apply" onclick="alert('Скачайте программу и запустите от имени администратора')"><i class="fas fa-download"></i> --DirectXMartyFilesEdition</button>
+            </div>
+        </div>
+
+        <!-- DirectX твики -->
+        <div class="section-dx" id="directx">
+            <div class="section-header">
+                <h2>DIRECTX ТВИКИ</h2>
+            </div>
+            <table class="tweak-table">
+                <thead>
+                    <tr><th>#</th><th>Твик</th><th>Описание</th><th>Флаг</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td class="tweak-name">Game+Performance Mode</td><td class="tweak-desc">Включение игрового режима и режима производительности</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>2</td><td class="tweak-name">DDSCAPS Acceleration</td><td class="tweak-desc">Аппаратное ускорение обработки поверхностей</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>3</td><td class="tweak-name">DirectDraw Hardware</td><td class="tweak-desc">Аппаратное ускорение DirectDraw</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>4</td><td class="tweak-name">MIDI Hardware</td><td class="tweak-desc">Аппаратное ускорение для MIDI</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>5</td><td class="tweak-name">Hardware Point Sprites</td><td class="tweak-desc">Аппаратное ускорение точечных объектов</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>6</td><td class="tweak-name">Hardware Rasterizer</td><td class="tweak-desc">Аппаратные средства растеризации</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>7</td><td class="tweak-name">Hardware State Blocks</td><td class="tweak-desc">Обработка stateblocks видеодрайвером</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>8</td><td class="tweak-name">Reference Driver</td><td class="tweak-desc">Образцовый драйвер программной прорисовки</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>9</td><td class="tweak-name">RAMP Driver</td><td class="tweak-desc">Драйвер программной RAMP-прорисовки</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>10</td><td class="tweak-name">NULL Device</td><td class="tweak-desc">Драйвер "NULL Device" для отладки</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>11</td><td class="tweak-name">DirectX Libraries</td><td class="tweak-desc">Дополнительные библиотеки DirectX</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>12</td><td class="tweak-name">AGP Texturing</td><td class="tweak-desc">Поддержка AGP текстурирования</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>13</td><td class="tweak-name">Non-Local Video Memory</td><td class="tweak-desc">Использование нелокальной видеопамяти</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>14</td><td class="tweak-name">MMX Instructions</td><td class="tweak-desc">Поддержка процессорных команд MMX</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>15</td><td class="tweak-name">MMX Fast Path</td><td class="tweak-desc">Быстрый MMX путь для графики</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>16</td><td class="tweak-name">MMX for RGB</td><td class="tweak-desc">Использование MMX для RGB</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>17</td><td class="tweak-name">Few Vertices</td><td class="tweak-desc">Оптимизация для малого количества вершин</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>18</td><td class="tweak-name">Disable VSync</td><td class="tweak-desc">Отключение вертикальной синхронизации</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>19</td><td class="tweak-name">Disable Debugging</td><td class="tweak-desc">Отключение всех видов отладки</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>20</td><td class="tweak-name">VRAM Buffer</td><td class="tweak-desc">Увеличение буфера видеопамяти</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>21</td><td class="tweak-name">Reduce Latency</td><td class="tweak-desc">Уменьшение задержек DirectX</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>22</td><td class="tweak-name">D3D11 Multithreaded</td><td class="tweak-desc">Многопоточность D3D11</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>23</td><td class="tweak-name">D3D12 Multithreaded</td><td class="tweak-desc">Многопоточность D3D12</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>24</td><td class="tweak-name">D3D11 Deferred Contexts</td><td class="tweak-desc">Отложенные контексты D3D11</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>25</td><td class="tweak-name">D3D12 Deferred Contexts</td><td class="tweak-desc">Отложенные контексты D3D12</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>26</td><td class="tweak-name">D3D11 Allow Tiling</td><td class="tweak-desc">Тайлинг ресурсов D3D11</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>27</td><td class="tweak-name">D3D11 Dynamic Codegen</td><td class="tweak-desc">Динамическая генерация кода D3D11</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>28</td><td class="tweak-name">D3D12 Allow Tiling</td><td class="tweak-desc">Тайлинг ресурсов D3D12</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>29</td><td class="tweak-name">D3D12 CPU Page Table</td><td class="tweak-desc">Таблица страниц CPU D3D12</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                    <tr><td>30</td><td class="tweak-name">D3D12 Heap Serialization</td><td class="tweak-desc">Сериализация кучи D3D12</td><td><span class="badge-small badge-dx-small">DX</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Vulkan твики -->
+        <div class="section-vk" id="vulkan">
+            <div class="section-header">
+                <div class="section-icon">🔴</div>
+                <h2>VULKAN ТВИКИ</h2>
+            </div>
+            <table class="tweak-table">
+                <thead>
+                    <tr><th>#</th><th>Твик</th><th>Описание</th><th>Флаг</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td class="tweak-name">Vulkan Shader Cache</td><td class="tweak-desc">Включение кэша шейдеров Vulkan для ускорения загрузки</td><td><span class="badge-small badge-vk-small">VK</span></td></tr>
+                    <tr><td>2</td><td class="tweak-name">Vulkan Topology Support</td><td class="tweak-desc">Включение виртуальной топологии для Vulkan</td><td><span class="badge-small badge-vk-small">VK</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- OpenGL твики -->
+        <div class="section-gl" id="opengl">
+            <div class="section-header">
+                <div class="section-icon">🔵</div>
+                <h2>OPENGL ТВИКИ</h2>
+            </div>
+            <table class="tweak-table">
+                <thead>
+                    <tr><th>#</th><th>Твик</th><th>Описание</th><th>Флаг</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td class="tweak-name">OpenGL Optimizations</td><td class="tweak-desc">Базовые оптимизации OpenGL (DisableAsync, MultisampleBuffers и др.)</td><td><span class="badge-small badge-gl-small">GL</span></td></tr>
+                    <tr><td>2</td><td class="tweak-name">OpenGL Buffer Size</td><td class="tweak-desc">Увеличение буферов OpenGL до 4MB/2MB/1MB для AMD/Intel/NVIDIA</td><td><span class="badge-small badge-gl-small">GL</span></td></tr>
+                    <tr><td>3</td><td class="tweak-name">OpenGL Driver Settings</td><td class="tweak-desc">Переменные окружения GPU_MAX_HEAP_SIZE, GPU_MAX_ALLOC_PERCENT</td><td><span class="badge-small badge-gl-small">GL</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CLI аргументы -->
+        <div class="cli-section" id="cli">
+            <div class="cli-title">💻 CLI АРГУМЕНТЫ</div>
+            <div class="cli-commands">
+                <div class="cli-item">
+                    <code>--StandardDirectX</code>
+                    <div class="cli-desc">Установить Standard DirectX</div>
+                </div>
+                <div class="cli-item">
+                    <code>--DirectXGameEdition</code>
+                    <div class="cli-desc">Установить DirectX Game Edition</div>
+                </div>
+                <div class="cli-item">
+                    <code>--DirectXMartyFilesEdition</code>
+                    <div class="cli-desc">Установить MartyFiles Edition</div>
+                </div>
+                <div class="cli-item">
+                    <code>--DirectXForProOS</code>
+                    <div class="cli-desc">Установить DirectX For ProOS</div>
+                </div>
+                <div class="cli-item">
+                    <code>-at / --alltweaks</code>
+                    <div class="cli-desc">Применить все твики</div>
+                </div>
+                <div class="cli-item">
+                    <code>-ut / --untweaks</code>
+                    <div class="cli-desc">Удалить все твики (DirectX Default)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="install-grid" style="margin-top: 20px;">
+            <div class="install-card" style="text-align: center;">
+                <div class="install-icon">🎮</div>
+                <h3>50+</h3>
+                <p>оптимизаций для DirectX</p>
+            </div>
+            <div class="install-card" style="text-align: center;">
+                <div class="install-icon">⚡</div>
+                <h3>30%</h3>
+                <p>прирост производительности</p>
+            </div>
+            <div class="install-card" style="text-align: center;">
+                <div class="install-icon">🖥️</div>
+                <h3>100%</h3>
+                <p>совместимость с Windows 7-11</p>
+            </div>
+            <div class="install-card" style="text-align: center;">
+                <div class="install-icon">🔧</div>
+                <h3>CLI</h3>
+                <p>поддержка командной строки</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Плавная прокрутка
+        document.querySelectorAll('.nav-links a, .footer-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
